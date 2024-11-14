@@ -1,0 +1,107 @@
+package com.example.calculator;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+    EditText ed1;
+    EditText ed2;
+    Button b1;
+    Button b2;
+    Button b3;
+    Button b4;
+    Integer i1;
+    Integer i2;
+    Integer RES = 0;
+    TextView n4;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Initialize EditTexts
+        ed1 = findViewById(R.id.ed_text1);
+        ed2 = findViewById(R.id.ed_text2);
+
+        // Initialize Buttons
+        b1 = findViewById(R.id.button1);
+        b2 = findViewById(R.id.button2);
+        b3 = findViewById(R.id.button3);
+        b4 = findViewById(R.id.button4);
+
+        // Initialize TextView
+        n4 = findViewById(R.id.textView4);
+
+        // Set onClickListeners for buttons
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performOperation("+");
+            }
+        });
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performOperation("-");
+            }
+        });
+        b3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performOperation("*");
+            }
+        });
+        b4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performOperation("/");
+            }
+        });
+    }
+
+    public void performOperation(String operation) {
+        // Error handling for empty input fields
+        if (ed1.getText().toString().isEmpty() || ed2.getText().toString().isEmpty()) {
+            n4.setText("Error: Please enter both numbers");
+            return;
+        }
+
+        // Parse the numbers
+        try {
+            i1 = Integer.parseInt(ed1.getText().toString());
+            i2 = Integer.parseInt(ed2.getText().toString());
+        } catch (NumberFormatException e) {
+            n4.setText("Error: Invalid number format");
+            return;
+        }
+
+        switch (operation) {
+            case "+":
+                RES = i1 + i2;
+                break;
+            case "-":
+                RES = i1 - i2;
+                break;
+            case "*":
+                RES = i1 * i2;
+                break;
+            case "/":
+                if (i2 == 0) {
+                    n4.setText("Error: Divide by zero");
+                    return;
+                }
+                RES = i1 / i2;
+                break;
+            default:
+                n4.setText("Error: Unknown operation");
+                return;
+        }
+        n4.setText("Result: " + RES);
+    }
+}
